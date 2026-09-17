@@ -56,3 +56,34 @@
 
 **Open questions:**
 - A real Firebase project has not been created in the Firebase console yet. Real Auth and Firestore operations remain blocked until project credentials are generated and populated into `.env.local`.
+
+---
+
+## 2026-09-18 — Onboarding and Quiz Flow Implementation
+
+**Prompt (summarized):** Build the onboarding flow with 2-3 static slides pitching "we reward real dates, not swiping" and a "Get Started" button routing to `/quiz`. Build the personality quiz with 8 short IPIP-10-style questions, one per screen with tap-through, capturing answers in local component state and logging them to the console upon completion without Firebase writes. Style both mobile-first and cleanly with Tailwind within Phase 1 constraints.
+
+**Files touched:**
+- `src/app/onboarding/page.tsx` (modified, replaced placeholder with interactive 3-slide pitch and navigation)
+- `src/app/quiz/page.tsx` (modified, replaced placeholder with 8-question IPIP-10 personality questionnaire, Likert scale selection, completion state, and console logger)
+- `stage-files/stage-1-prototype.md` (modified, appended this log entry)
+
+**What changed:**
+- Replaced the `/onboarding` stub with an interactive client-side 3-slide flow. Slide 1 highlights the predatory retention incentives of incumbent dating apps ("Dating apps monetize staying single"). Slide 2 introduces Rabbit Hole's core premise ("We reward you for leaving the app" with real dates as the core currency). Slide 3 emphasizes mutual accountability and anti-ghosting without leaderboards or toxic streaks. Each slide includes a slide counter, progress pill indicators, "Skip" and "Back" controls, and a prominent "Get Started" call-to-action on the final slide that directs the user to `/quiz`.
+- Replaced the `/quiz` stub with a mobile-first, one-question-per-screen personality test featuring 8 IPIP-10-style items mapped to the Big Five traits (Extraversion, Agreeableness, Conscientiousness, Emotional Stability, Openness). Users tap a 5-point Likert response ("Disagree strongly" to "Agree strongly") which stores their response in React state and auto-advances through the deck with a dynamic progress bar and "Previous" button. Upon answering Question 8, answers are logged to the browser console (`console.log`), and a completion screen renders showing a breakdown grid of all captured responses along with routing buttons to `/feed` or `/`.
+- Maintained clean, responsive Tailwind styling without implementing complex design tokens or unnecessary dependencies.
+
+**Why:**
+- Directly aligns with Phase 1 Deliverables in `plan.md` section 3: "Core loop: onboarding → short personality quiz → mocked Fit Score...".
+- Adheres strictly to council constraints in `plan.md` section 2 and `plans/council-notes.md`: no public leaderboard, no unmitigated streaks, no biometric UI or face-embedding fields, and no exposed numerical score.
+- Defers Firebase persistence and algorithm calculations to keep the prototype iterative and decoupled until the real Firebase project and data schemas are ready.
+
+**Result:**
+- Both flows were verified end-to-end using an automated browser subagent.
+- The onboarding flow successfully progressed through Slide 1, Slide 2, and Slide 3, and clicking "Get Started" navigated immediately to `/quiz`.
+- The quiz successfully recorded responses across all 8 screens, emitted `Quiz completed. Captured answers: {1: 5, 2: 5, 3: 4, 4: 1, 5: 5, 6: 1, 7: 5, 8: 5}` to the console, and rendered the completion grid properly.
+
+**Open questions:**
+- How should the 8 personality dimension scores be mathematically weighted when computing the initial mock Fit Score in upcoming Phase 1 steps?
+- When Firebase Auth is wired up, should the quiz answers be temporarily stored in localStorage to survive the sign-up/login redirect, or will authentication precede the quiz?
+
